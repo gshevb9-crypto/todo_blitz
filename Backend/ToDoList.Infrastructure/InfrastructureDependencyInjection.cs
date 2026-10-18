@@ -106,7 +106,7 @@ namespace ToDoList.Infrastructure
                     Username = username,
                     Password = password,
                     Database = database,
-                    SslMode = isProduction ? Npgsql.SslMode.Require : Npgsql.SslMode.Prefer,
+                    SslMode = Npgsql.SslMode.Prefer,
                     Timeout = 15,
                     CommandTimeout = 30
                 };
@@ -138,10 +138,6 @@ namespace ToDoList.Infrastructure
             try
             {
                 var builder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
-                if (isProduction && builder.SslMode == Npgsql.SslMode.Disable)
-                {
-                    builder.SslMode = Npgsql.SslMode.Require;
-                }
                 return builder.ToString();
             }
             catch
