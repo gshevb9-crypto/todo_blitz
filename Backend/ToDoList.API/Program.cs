@@ -40,7 +40,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Apply database migrations on startup
+// Apply database migrations on startup with resilient retry loop for container cold-starts
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -48,18 +48,36 @@ using (var scope = app.Services.CreateScope())
     var logger = loggerFactory.CreateLogger("Startup.DatabaseInitialization");
     var context = services.GetRequiredService<ApplicationDbContext>();
 
-    try
+    const int maxRetries = 10;
+    var delay = TimeSpan.FromSeconds(3);
+
+    for (var attempt = 1; attempt <= maxRetries; attempt++)
     {
-        logger.LogInformation("Starting database migration...");
-        await context.Database.MigrateAsync();
-        logger.LogInformation("Database migration completed successfully.");
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(
-            ex,
-            "Failed to apply database migrations. Application startup will continue. " +
-            "Ensure PostgreSQL connectivity and credentials in DATABASE_URL.");
+        try
+        {
+            logger.LogInformation("Starting database migration (Attempt {Attempt}/{MaxRetries})...", attempt, maxRetries);
+            await context.Database.MigrateAsync();
+            logger.LogInformation("Database migration completed successfully.");
+            break;
+        }
+        catch (Exception ex)
+        {
+            if (attempt == maxRetries)
+            {
+                logger.LogError(
+                    ex,
+                    "Failed to apply database migrations after {MaxRetries} attempts. Application startup will continue. " +
+                    "Ensure PostgreSQL connectivity and credentials in DATABASE_URL.", maxRetries);
+            }
+            else
+            {
+                logger.LogWarning(
+                    "Database not ready yet (Attempt {Attempt}/{MaxRetries}): {Message}. Retrying in {Delay}s...",
+                    attempt, maxRetries, ex.Message, delay.TotalSeconds);
+                await System.Threading.Tasks.Task.Delay(delay);
+                delay = TimeSpan.FromSeconds(Math.Min(delay.TotalSeconds * 1.5, 15));
+            }
+        }
     }
 }
 
