@@ -15,6 +15,7 @@ namespace ToDoList.API.Controllers
             _context = context;
         }
 
+        [HttpGet("/")]
         [HttpGet("health")]
         [HttpGet("api/health")]
         public async Task<IActionResult> GetHealth(System.Threading.CancellationToken cancellationToken = default)
