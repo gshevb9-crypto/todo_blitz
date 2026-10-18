@@ -1,0 +1,50 @@
+services:
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: todolist-api
+    # NGINX reverse proxy will route traffic to backend:8080 internally
+    expose:
+      - "8080"
+    env_file:
+      - .env
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_HTTPS_PORT: "443"
+    volumes:
+      # Persistent Docker volume ensuring uploaded note images survive restarts and redeployments
+      - todo_files:/app/wwwroot/files
+    networks:
+      - todo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: todolist-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+volumes:
+  # Named persistent volume for user-uploaded images and documents
+  todo_files:
+    driver: local
+
+networks:
+  todo-network:
+    driver: bridge

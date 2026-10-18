@@ -1,0 +1,24 @@
+# Environment and secrets
+.env
+*.env.local
+*.user
+
+# Build outputs
+bin/
+obj/
+publish/
+dist/
+
+# User uploads
+wwwroot/files/*
+!wwwroot/files/.gitkeep
+
+# IDE and OS
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+Thumbs.db
+Desktop.ini
+.DS_Store
