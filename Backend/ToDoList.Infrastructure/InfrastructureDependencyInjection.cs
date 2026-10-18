@@ -74,7 +74,7 @@ namespace ToDoList.Infrastructure
                 }
             }
 
-            var connectionString = FormatPostgresConnectionString(rawConnectionString);
+            var connectionString = FormatPostgresConnectionString(rawConnectionString, isProduction);
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -88,7 +88,7 @@ namespace ToDoList.Infrastructure
             });
         }
 
-        private static string FormatPostgresConnectionString(string connectionString)
+        private static string FormatPostgresConnectionString(string connectionString, bool isProduction)
         {
             if (connectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
                 connectionString.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
@@ -106,7 +106,7 @@ namespace ToDoList.Infrastructure
                     Username = username,
                     Password = password,
                     Database = database,
-                    SslMode = Npgsql.SslMode.Prefer,
+                    SslMode = isProduction ? Npgsql.SslMode.Require : Npgsql.SslMode.Prefer,
                     Timeout = 15,
                     CommandTimeout = 30
                 };
@@ -135,7 +135,19 @@ namespace ToDoList.Infrastructure
                 return builder.ToString();
             }
 
-            return connectionString;
+            try
+            {
+                var builder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
+                if (isProduction && builder.SslMode == Npgsql.SslMode.Disable)
+                {
+                    builder.SslMode = Npgsql.SslMode.Require;
+                }
+                return builder.ToString();
+            }
+            catch
+            {
+                return connectionString;
+            }
         }
 
         private static void AddUnitOfWork(IServiceCollection services)

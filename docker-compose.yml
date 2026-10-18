@@ -8,7 +8,8 @@ services:
     expose:
       - "8080"
     env_file:
-      - .env
+      - path: .env
+        required: false
     environment:
       ASPNETCORE_URLS: "http://+:8080"
       ASPNETCORE_ENVIRONMENT: "Production"
