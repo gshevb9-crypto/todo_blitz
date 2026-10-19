@@ -17,6 +17,7 @@ Clean Architecture ASP.NET Core 8 Web API for personal notes, notebook tabs, and
    docker compose up -d --build
    ```
 3. Test the endpoints:
+   - Wake-Up: `http://localhost/api/system/wake-up` -> `{"status":"ready","value":"Gaber"}`
    - Startup Readiness: `http://localhost/api/system/startup`
    - Swagger: `http://localhost/swagger`
    - Health check: `http://localhost/health`
