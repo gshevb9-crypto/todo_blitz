@@ -37,6 +37,5 @@ ENV ASPNETCORE_HTTPS_PORT="443"
 
 # Blitz.cloud listens on port 8080 and sets PORT environment variable
 EXPOSE 8080
-EXPOSE 80
 
 ENTRYPOINT ["dotnet", "ToDoList.API.dll"]
