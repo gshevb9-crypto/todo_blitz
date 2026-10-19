@@ -12,7 +12,7 @@ COPY ["Backend/ToDoList.API/ToDoList.API.csproj", "Backend/ToDoList.API/"]
 RUN dotnet restore "Backend/ToDoList.API/ToDoList.API.csproj"
 
 # Copy entire backend source code
-COPY Backend/ .
+COPY Backend/ ./Backend/
 
 # Build and publish in Release mode
 WORKDIR "/src/Backend/ToDoList.API"
