@@ -1,13 +1,18 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ToDoList.API.Extensions;
 using ToDoList.Infrastructure.Persistence.Context;
 
 namespace ToDoList.API.Controllers
 {
     [ApiController]
+    [EnableCors(CorsExtensions.PolicyName)]
+    [AllowAnonymous]
     public class HealthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -40,11 +45,14 @@ namespace ToDoList.API.Controllers
                 dbError = ex.Message;
             }
 
-            var status = isDbConnected && (pendingMigrationsCount ?? 0) == 0 ? "Healthy" : "Degraded";
+            var isHealthy = isDbConnected && (pendingMigrationsCount ?? 0) == 0;
+            var status = isHealthy ? "Healthy" : "Degraded";
+            var availability = isHealthy ? "online" : "offline";
 
             return Ok(new
             {
                 status,
+                availability,
                 service = "ToDo & Notes API",
                 timestamp = DateTime.UtcNow.ToString("O"),
                 database = isDbConnected ? "Connected" : "Disconnected",

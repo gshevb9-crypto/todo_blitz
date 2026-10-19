@@ -68,8 +68,8 @@ In Blitz Dashboard -> Your App -> **Settings** -> **Environment Variables**, con
 ## 5. Step 4: Verification Checklist
 
 After deployment completes:
-- Wake-Up: `GET https://api.yourdomain.com/api/system/wake-up` -> HTTP 200 `{"status":"ready","value":"Gaber"}`
+- Root Wake-Up / Health: `GET https://api.yourdomain.com/` -> HTTP 200 `{"status":"Healthy","availability":"online","service":"ToDo & Notes API","database":"Connected",...}`
 - Startup Readiness: `GET https://api.yourdomain.com/api/system/startup` -> HTTP 200 `{"success":true,"message":"Backend application and database dependency are ready.","data":{"status":"Ready","service":"ToDo & Notes API","database":"Ready"}}`
-- Healthcheck: `GET https://api.yourdomain.com/health` -> HTTP 200 `{"status":"Healthy","database":"Connected"}`
+- Healthcheck: `GET https://api.yourdomain.com/health` -> HTTP 200 `{"status":"Healthy","availability":"online","database":"Connected"}`
 - Swagger Documentation: `GET https://api.yourdomain.com/swagger`
 - Image Storage: Images are served via `GET https://api.yourdomain.com/files/tabs/{fileName}.webp`

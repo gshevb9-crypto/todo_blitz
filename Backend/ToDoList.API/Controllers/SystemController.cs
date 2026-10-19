@@ -27,27 +27,7 @@ namespace ToDoList.API.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Dedicated static wake-up endpoint that executes ASP.NET Core application code
-        /// and returns an immediate static response without accessing external dependencies.
-        /// Publicly accessible before authentication to wake up sleeping containers.
-        /// </summary>
-        [HttpGet("wake-up")]
-        [AllowAnonymous]
-        public IActionResult WakeUp()
-        {
-            var clientIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-            _logger.LogInformation("Incoming backend wake-up request received from IP: {ClientIp}", clientIp);
 
-            var response = new
-            {
-                status = "ready",
-                value = "Gaber"
-            };
-
-            _logger.LogInformation("Backend wake-up response sent successfully (IP: {ClientIp})", clientIp);
-            return Ok(response);
-        }
 
         /// <summary>
         /// Real startup readiness check that executes ASP.NET Core logic and verifies
