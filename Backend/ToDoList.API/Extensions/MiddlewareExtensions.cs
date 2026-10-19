@@ -10,7 +10,7 @@ namespace ToDoList.API.Extensions
     {
         public static IApplicationBuilder UseApiMiddlewares(this IApplicationBuilder app)
         {
-            // 1. Forwarded Headers from PaaS edge router (Blitz.cloud / Nginx)
+            // 1. Forwarded Headers from PaaS edge router (Blitz.cloud / reverse proxy)
             var forwardedHeadersOptions = new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor |

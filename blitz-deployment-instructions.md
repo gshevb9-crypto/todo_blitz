@@ -11,7 +11,6 @@ This guide provides step-by-step instructions to deploy the backend service to B
 - **File Storage**: Container persistent volume mounted at `/app/wwwroot/files` ensuring uploaded images survive restarts and redeployments.
 - **Port**: Exposed on port `8080` (with dynamic `$PORT` binding support).
 - **Edge Router**: Blitz Edge terminates TLS/HTTPS, handles automatic SSL certificates, and forwards headers (`X-Forwarded-For`, `X-Forwarded-Proto`, `X-Forwarded-Host`) directly to port `8080`.
-- **Nginx Note**: Nginx is NOT required on Blitz.cloud because Blitz Edge handles all edge routing and SSL termination natively, and ASP.NET Core handles CORS, Swagger, and static files. For traditional self-managed Linux VPS servers, `docker-compose.vps.yml` is provided.
 
 ---
 

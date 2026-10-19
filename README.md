@@ -1,4 +1,4 @@
-# ToDo List VPS Blades — Backend & Nginx Deployment
+# ToDo List & Notes Web API — Backend Deployment
 
 Clean Architecture ASP.NET Core 8 Web API for personal notes, notebook tabs, and persistent WebP image management.
 
@@ -17,10 +17,10 @@ Clean Architecture ASP.NET Core 8 Web API for personal notes, notebook tabs, and
    docker compose up -d --build
    ```
 3. Test the endpoints:
-   - Root Wake-Up / Health: `http://localhost/` -> `{"status":"Healthy","availability":"online",...}`
-   - Startup Readiness: `http://localhost/api/system/startup`
-   - Swagger: `http://localhost/swagger`
-   - Health check: `http://localhost/health`
+   - Root Wake-Up / Health: `http://localhost:8080/` -> `{"status":"Healthy","availability":"online",...}`
+   - Startup Readiness: `http://localhost:8080/api/system/startup`
+   - Swagger Documentation: `http://localhost:8080/swagger`
+   - Health check: `http://localhost:8080/health`
 
 ## Production Deployment to Blitz.cloud
 
