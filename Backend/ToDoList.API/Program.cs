@@ -14,6 +14,13 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Handle dynamic PORT assigned by cloud PaaS (Blitz.cloud / Render / Railway)
+var envPort = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrWhiteSpace(envPort))
+{
+    builder.WebHost.UseUrls($"http://+:{envPort}");
+}
+
 // ==========================================
 // Add Services
 // ==========================================

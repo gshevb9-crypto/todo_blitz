@@ -4,7 +4,8 @@ services:
       context: ./Backend
       dockerfile: Dockerfile
     container_name: todolist-api
-    # NGINX reverse proxy will route traffic to backend:8080 internally
+    ports:
+      - "8080:8080"
     expose:
       - "8080"
     env_file:
