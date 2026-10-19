@@ -1,25 +1,22 @@
+# Blitz.cloud Application Compose Configuration
+# ASP.NET Core 8 Web API + PostgreSQL managed database
 services:
   backend:
     build:
-      context: ./Backend
+      context: .
       dockerfile: Dockerfile
     container_name: todolist-api
     ports:
       - "8080:8080"
     expose:
       - "8080"
-    env_file:
-      - path: .env
-        required: false
     environment:
       ASPNETCORE_URLS: "http://+:8080"
       ASPNETCORE_ENVIRONMENT: "Production"
       ASPNETCORE_HTTPS_PORT: "443"
     volumes:
-      # Persistent Docker volume ensuring uploaded note images survive restarts and redeployments
+      # Persistent storage ensuring uploaded note images survive restarts and redeployments
       - todo_files:/app/wwwroot/files
-    networks:
-      - todo-network
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
@@ -28,25 +25,6 @@ services:
       retries: 3
       start_period: 40s
 
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    container_name: todolist-nginx
-    ports:
-      - "80:80"
-    depends_on:
-      backend:
-        condition: service_healthy
-    networks:
-      - todo-network
-    restart: unless-stopped
-
 volumes:
-  # Named persistent volume for user-uploaded images and documents
   todo_files:
     driver: local
-
-networks:
-  todo-network:
-    driver: bridge

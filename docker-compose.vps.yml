@@ -1,0 +1,50 @@
+# Docker Compose configuration for self-managed Linux VPS deployments with NGINX reverse proxy
+# For Blitz.cloud deployment, use docker-compose.yml or Dockerfile directly.
+services:
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: todolist-api
+    expose:
+      - "8080"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_HTTPS_PORT: "443"
+    volumes:
+      - todo_files:/app/wwwroot/files
+    networks:
+      - todo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: todolist-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+volumes:
+  todo_files:
+    driver: local
+
+networks:
+  todo-network:
+    driver: bridge
