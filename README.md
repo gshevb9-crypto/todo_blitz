@@ -17,10 +17,8 @@ Clean Architecture ASP.NET Core 8 Web API for personal notes, notebook tabs, and
    docker compose up -d --build
    ```
 3. Test the endpoints:
-   - Root Wake-Up / Health: `http://localhost:8080/` -> `{"status":"Healthy","availability":"online",...}`
-   - Startup Readiness: `http://localhost:8080/api/system/startup`
+   - Root / Health check: `http://localhost:8080/` or `http://localhost:8080/health` -> `{"status":"Healthy",...}`
    - Swagger Documentation: `http://localhost:8080/swagger`
-   - Health check: `http://localhost:8080/health`
 
 ## Production Deployment to Blitz.cloud
 

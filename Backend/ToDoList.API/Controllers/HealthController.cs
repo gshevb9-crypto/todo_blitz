@@ -47,12 +47,10 @@ namespace ToDoList.API.Controllers
 
             var isHealthy = isDbConnected && (pendingMigrationsCount ?? 0) == 0;
             var status = isHealthy ? "Healthy" : "Degraded";
-            var availability = isHealthy ? "online" : "offline";
 
             return Ok(new
             {
                 status,
-                availability,
                 service = "ToDo & Notes API",
                 timestamp = DateTime.UtcNow.ToString("O"),
                 database = isDbConnected ? "Connected" : "Disconnected",

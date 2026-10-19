@@ -68,8 +68,6 @@ In Blitz Dashboard -> Your App -> **Settings** -> **Environment Variables**, con
 ## 5. Step 4: Verification Checklist
 
 After deployment completes:
-- Root Wake-Up / Health: `GET https://gshe.blitz.cloud/` -> HTTP 200 `{"status":"Healthy","availability":"online","service":"ToDo & Notes API","database":"Connected",...}`
-- Startup Readiness: `GET https://gshe.blitz.cloud/api/system/startup` -> HTTP 200 `{"success":true,"message":"Backend application and database dependency are ready.","data":{"status":"Ready","service":"ToDo & Notes API","database":"Ready"}}`
-- Healthcheck: `GET https://gshe.blitz.cloud/health` -> HTTP 200 `{"status":"Healthy","availability":"online","database":"Connected"}`
+- Healthcheck / Root: `GET https://gshe.blitz.cloud/` or `GET https://gshe.blitz.cloud/health` -> HTTP 200 `{"status":"Healthy","service":"ToDo & Notes API","database":"Connected",...}`
 - Swagger Documentation: `GET https://gshe.blitz.cloud/swagger`
 - Image Storage: Images are served via `GET https://gshe.blitz.cloud/files/tabs/{fileName}.webp`
